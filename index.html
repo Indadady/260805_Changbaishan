@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <!-- 🚨 Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JLH9GD9SVR"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-JLH9GD9SVR');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[투어메이커] 민족의 영산, 백두산(서파+북파) 3박 4일 행운회 단독투어</title>
+    
+    <!-- SEO & Open Graph -->
+    <meta name="description" content="우리 민족의 영산 백두산 천지를 만나는 행운회 고객님만의 3박 4일 프리미엄 단독 투어">
+    <meta property="og:title" content="[초대장] 백두산 3박 4일 행운회 단독투어">
+    <meta property="og:description" content="행운회 고객님을 위한 3박 4일 맞춤형 스마트 가이드북입니다. 서파/북파 더블 등정과 상세 일정을 확인하세요!">
+    <meta property="og:image" content="https://cdn.pharmnews.com/news/photo/202309/230149_102961_1716.jpg">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Leaflet CSS (Map) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Nanum+Myeongjo:wght@700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        .hero-bg { 
+            background: linear-gradient(rgba(0, 30, 60, 0.4), rgba(0, 0, 0, 0.7)), url('https://cdn.pharmnews.com/news/photo/202309/230149_102959_1635.jpg'); 
+            background-size: cover; background-position: center; background-attachment: fixed;
+        }
+        @media (max-width: 768px){ .hero-bg { background-attachment: scroll; } }
+        #map { height: 500px; width: 100%; border-radius: 1rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); z-index: 10; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        /* Map Animations (스마트가이드북 지도 5원칙) */
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .leaflet-tooltip { font-weight: bold; font-family: 'Noto Sans KR', sans-serif; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: none; }
+        
+        /* Common Animations */
+        .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        section { scroll-margin-top: 80px; }
+        
+        /* Timeline */
+        .timeline-dot { position: absolute; left: -25px; top: 4px; width: 16px; height: 16px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 2px var(--tw-ring-color); background-color: var(--tw-bg-color); }
+
+        /* Widget Scroller */
+        .weather-scroll { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 1rem; gap: 1rem; }
+        .weather-item { scroll-snap-align: start; min-width: 120px; }
+
+        /* Custom Scrollbar for PC */
+        .custom-scrollbar::-webkit-scrollbar { height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f8fafc; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* 🖨️ Print Styles (결재 서류용 투어메이커 표준 A4 양식 엄수) */
+        @media print {
+            @page { size: A4 portrait; margin: 12mm 10mm; } 
+            body { background-color: #ffffff !important; font-size: 10pt; color: #1e293b !important; }
+            a[href]:after { content: none !important; }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            
+            .print-hidden, .print\:hidden { display: none !important; }
+            #print-area { display: block !important; width: 100%; color: #1e293b; font-family: 'Noto Sans KR', sans-serif; }
+            
+            .print-page-container { width: 100%; margin: 0; padding: 0; }
+            
+            .print-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #004098; padding-bottom: 8px; margin-bottom: 15px; }
+            .print-header .logo img { height: 32px; object-fit: contain; }
+            .print-header .doc-info { text-align: right; font-size: 11px; color: #475569; }
+            
+            .print-title-section { text-align: center; margin-bottom: 15px; }
+            .print-title-section h1 { font-size: 20px; font-weight: 700; color: #0f172a; letter-spacing: -0.5px; margin:0;}
+            
+            .print-overview-slim { display: flex; justify-content: space-between; background-color: #f8fafc; border: 1px solid #94a3b8; border-radius: 6px; padding: 8px 12px; margin-bottom: 15px; font-size: 12.5px; }
+            .print-overview-slim div { display: flex; gap: 8px; }
+            .print-overview-slim .label { font-weight: 700; color: #004098; }
+            
+            /* 테이블 열 비율 고정 (11%, 75%, 14%) 및 공백 최소화 */
+            .print-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 12px; table-layout: fixed; border: 2px solid #1e293b; }
+            .print-table th, .print-table td { border: 1px solid #1e293b; padding: 6px 8px; vertical-align: top; page-break-inside: avoid; word-break: keep-all; }
+            .print-table th { background-color: #f8fafc !important; color: #1e293b; font-weight: 700; text-align: center; font-size: 12.5px; border-bottom: 2px solid #1e293b;}
+            
+            .print-col-date { width: 11%; text-align: center; font-weight: 700; vertical-align: middle; background-color: #f8fafc; }
+            .print-col-desc { width: 75%; }
+            .print-col-meal { width: 14%; text-align: center; vertical-align: middle; }
+            
+            .print-day-divider td { border-top: 2px solid #1e293b !important; }
+            
+            .print-time-flow { margin-bottom: 4px; font-weight: 500; font-size: 12px; }
+            .print-time-tag { display: inline-block; color: #004098; font-weight: 700; margin-right: 5px; width: 38px;}
+            .print-highlight { font-weight: 700; color: #004098; }
+            
+            .print-desc-list { list-style: none; margin: 4px 0 8px 0; padding-left: 5px; font-size: 12px; }
+            .print-desc-list li { position: relative; padding-left: 12px; margin-bottom: 3px; line-height: 1.4; }
+            .print-desc-list li::before { content: '■'; font-size: 8px; position: absolute; left: 0; top: 3px; color: #004098; }
+            
+            .print-hotel-divider { border: 0; border-top: 1px dashed #94a3b8; margin: 8px 0 6px 0; }
+            .print-hotel-info { font-size: 12px; color: #0f172a; font-weight:700;}
+            
+            .print-meal-wrapper { display: flex; flex-direction: column; gap: 8px; justify-content: center; height: 100%; text-align: left; padding-left: 5px; }
+            .print-meal-simple { display: flex; align-items: flex-start; line-height: 1.3; font-size: 12px;}
+            .print-meal-simple strong { color: #004098; margin-right: 4px; width: 16px; flex-shrink: 0; }
+            .print-meal-menu { display: flex; flex-direction: column; word-break: keep-all;}
+            .print-meal-sub { font-size: 10.5px; margin-top: 2px; color: #475569; }
+            
+            .print-remarks { font-size: 11px; color: #475569; text-align: right; font-weight: 500; margin-bottom: 10px; }
+            
+            .print-footer-box { margin-top: 10px; padding-top: 10px; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; align-items: center; }
+            .print-manager-info { text-align: left; border-left: 3px solid #004098; padding-left: 10px; }
+            .print-manager-info .names { color: #0f172a; font-weight: 700; font-size: 12.5px; }
+        }
+    </style>
+</head>
+<body class="antialiased pb-20 md:pb-0 print:pb-0 print:bg-white">
+
+    <!-- Web Content (Hidden on Print) -->
+    <div class="print:hidden">
+        
+        <!-- Header -->
+        <header class="bg-white/95 backdrop-blur-md shadow-md sticky top-0 z-50 transition-all duration-300 border-b-2 border-[#004098]">
+            <nav class="container mx-auto px-4 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-3 shrink-0">
+                    <a href="http://tourmaker.kr" target="_blank">
+                        <!-- 투어메이커 필수 지정 로고 -->
+                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgHfgIX70O5k6Anuo0UgALIdaG9jSga9auHu3uyz0uEirylGPAJnjN_qQbvEGMUvPqUQf_g9FMNUHRxlDcUBf4vZ3Mpy4TnA9WxbmzWYK11gt2zuy_Irl4wctNFjcjLyPo0GPXV792o_J7L9guRMuDfeC1gy7USwywjYbECZgzcsHybuGRRAXAnO1eNmP8/s320/logo.png" alt="Tourmaker" class="h-8">
+                    </a>
+                    <span id="d-day-badge" class="hidden text-white text-[10px] px-2 py-0.5 rounded-full font-bold"></span>
+                </div>
+                
+                <div class="flex-1 overflow-x-auto no-scrollbar ml-4 md:ml-8">
+                    <div class="flex items-center space-x-1 md:space-x-6 whitespace-nowrap pr-4">
+                        <a href="#home" class="px-3 py-2 text-sm font-bold text-slate-600 hover:text-blue-800 rounded-lg">홈</a>
+                        <a href="#highlights" class="px-3 py-2 text-sm font-bold text-[#004098] hover:bg-blue-50 rounded-lg"><i class="fa-solid fa-star mr-1"></i>핵심포인트</a>
+                        <a href="#video" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-blue-800 rounded-lg">명소영상</a>
+                        <a href="#flight" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-blue-800 rounded-lg">항공편</a>
+                        <a href="#widgets" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-blue-800 rounded-lg">현지정보</a>
+                        <a href="#map-section" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-blue-800 rounded-lg">동선지도</a>
+                        <a href="#schedule" class="px-3 py-2 text-sm font-bold text-[#004098] hover:bg-slate-50 rounded-lg"><i class="fa-solid fa-calendar-check mr-1"></i>상세일정</a>
+                        <a href="#accommodations" class="px-3 py-2 text-sm font-bold text-emerald-700 hover:bg-emerald-50 rounded-lg"><i class="fa-solid fa-bed mr-1"></i>호텔안내</a>
+                        <a href="#check" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-blue-800 rounded-lg">준비물&메모</a>
+                    </div>
+                </div>
+                <button onclick="shareLink()" class="shrink-0 p-2 text-slate-500 hover:text-[#004098] ml-2" title="일정표 공유하기"><i class="fa-solid fa-share-nodes text-xl"></i></button>
+            </nav>
+        </header>
+
+        <!-- Hero Section -->
+        <section id="home" class="hero-bg min-h-[65vh] flex items-center justify-center text-center px-4 relative">
+            <div class="animate-fade-in-up text-white w-full max-w-4xl flex flex-col items-center z-10">
+                <span class="bg-[#004098]/90 text-white px-6 py-2 rounded-full text-sm md:text-base font-bold mb-6 inline-block border border-white/20 shadow-lg tracking-widest">
+                    <i class="fa-solid fa-mountain-sun mr-2"></i>8명 단독 프리미엄 투어
+                </span>
+                <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 drop-shadow-2xl font-[Nanum Myeongjo] leading-tight">
+                    민족의 영산, 백두산<br>
+                    <span class="text-blue-300 font-bold text-3xl md:text-5xl mt-2 inline-block">행운회 단독투어</span>
+                </h1>
+                <div class="bg-black/50 backdrop-blur-md inline-block px-8 py-4 rounded-3xl mt-4 border border-white/10 shadow-2xl">
+                    <p id="hero-status-text" class="text-lg md:text-xl text-slate-100 font-medium tracking-wide mb-1">
+                        고객님만을 위한 품격 있는 여정
+                    </p>
+                    <p class="text-lg text-blue-300 font-bold">2026.08.05(수) ~ 08.08(토)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Highlights Section -->
+        <section id="highlights" class="py-16 bg-white -mt-8 rounded-t-3xl relative z-20 shadow-[0_-5px_20px_rgba(0,0,0,0.1)]">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <span class="text-[#004098] font-black tracking-widest text-xs uppercase">TOUR HIGHLIGHTS</span>
+                    <h2 class="text-2xl md:text-3xl font-bold text-slate-800 mt-2">행운회 3가지 핵심 포인트</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                    <div class="bg-blue-50 p-8 rounded-3xl border border-blue-100 shadow-sm hover:shadow-lg transition-all duration-300 group text-center">
+                        <div class="w-20 h-20 mx-auto bg-white rounded-full flex items-center justify-center mb-6 shadow-md group-hover:scale-110 transition-transform text-[#004098] text-3xl">⛰️</div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-3">북파 & 서파 더블 등정</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">지프차를 타고 편안하게 오르는 장엄한 '북파', 1,442개의 계단을 오르며 탁 트인 전경을 마주하는 '서파'까지 천지의 두 가지 얼굴을 모두 감상합니다.</p>
+                    </div>
+
+                    <div class="bg-amber-50 p-8 rounded-3xl border border-amber-100 shadow-sm hover:shadow-lg transition-all duration-300 group text-center">
+                        <div class="w-20 h-20 mx-auto bg-white rounded-full flex items-center justify-center mb-6 shadow-md group-hover:scale-110 transition-transform text-amber-600 text-3xl">🎉</div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-3">VIP 액티비티 특전</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">눈앞에서 조망하는 두만강 뗏목 보트 탑승, 실감나는 5D 플라잉 장백산 관람, 여독을 녹이는 90분 전신 마사지가 모두 포함되어 있습니다.</p>
+                    </div>
+
+                    <div class="bg-emerald-50 p-8 rounded-3xl border border-emerald-100 shadow-sm hover:shadow-lg transition-all duration-300 group text-center">
+                        <div class="w-20 h-20 mx-auto bg-white rounded-full flex items-center justify-center mb-6 shadow-md group-hover:scale-110 transition-transform text-emerald-600 text-3xl">🛍️</div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-3">8인 단독 & 쇼핑 2회</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">행운회 회원 8분만 모시는 프라이빗 단독 행사입니다. 불필요한 옵션은 빼고(노옵션), 쇼핑 2회 조건으로 여유롭게 여행과 미식에 집중합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Video Curation (Single Video Centered) -->
+        <section id="video" class="py-16 bg-slate-900 border-t border-slate-800">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12 text-white">
+                    <span class="inline-block bg-white/20 text-white text-xs px-3 py-1 rounded-full font-bold mb-3 border border-white/30">DESTINATION INFO</span>
+                    <h2 class="text-3xl font-bold">🎬 한눈에 보는 여행지</h2>
+                    <p class="text-slate-400 text-sm mt-3">행운회 여러분이 만날 아름다운 백두산 천지의 모습을 영상으로 먼저 만나보세요.</p>
+                </div>
+                
+                <div class="max-w-4xl mx-auto">
+                    <div class="bg-slate-800 rounded-3xl overflow-hidden border border-slate-700 shadow-xl flex flex-col">
+                        <div class="aspect-video relative bg-black">
+                            <iframe class="w-full h-full absolute top-0 left-0" src="https://www.youtube.com/embed/ut_KqmD7h8s?controls=1" title="Baekdu Mountain" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="p-6 md:p-8 flex flex-col text-center">
+                            <h3 class="text-2xl font-bold text-blue-400 mb-4">⛰️ 영원의 호수, 백두산 여행 미리보기</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed">민족의 영산 백두산의 웅장한 사계절과 천지의 벅찬 감동, 그리고 지프와 도보로 오르는 두 가지 다채로운 등정 코스의 생생함을 영상으로 확인하세요.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Flight Information -->
+        <section id="flight" class="py-12 bg-slate-50 border-t border-slate-200">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-8">
+                    <span class="text-slate-500 font-black tracking-widest text-xs uppercase">FLIGHT SCHEDULE</span>
+                    <h2 class="text-3xl font-bold text-slate-800 mt-2">항공편 안내</h2>
+                    <p class="text-slate-500 text-sm mt-2">청주 국제공항에서 출발하는 편리한 직항 노선입니다.</p>
+                </div>
+                <div class="max-w-4xl mx-auto mb-6">
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-md p-6">
+                        <div class="flex flex-col md:flex-row gap-6 justify-center items-center">
+                            <div class="bg-[#f0f4ff] border border-blue-100 rounded-xl p-5 w-full md:w-1/2 text-center relative overflow-hidden">
+                                <span class="text-xs bg-[#004098] text-white px-3 py-1 rounded-full font-bold mb-3 inline-block">출국 8.5(수)</span>
+                                <p class="font-black text-xl text-slate-800 mb-1">티웨이항공 TW685</p>
+                                <p class="text-slate-600 font-medium text-lg">청주 11:50 <i class="fa-solid fa-plane-departure text-blue-400 mx-2"></i> 연길 13:25</p>
+                            </div>
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 w-full md:w-1/2 text-center relative overflow-hidden">
+                                <span class="text-xs bg-slate-600 text-white px-3 py-1 rounded-full font-bold mb-3 inline-block">귀국 8.8(토)</span>
+                                <p class="font-black text-xl text-slate-800 mb-1">티웨이항공 TW686</p>
+                                <p class="text-slate-600 font-medium text-lg">연길 14:25 <i class="fa-solid fa-plane-arrival text-slate-400 mx-2"></i> 청주 18:15</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🌍 Overseas Widgets Section (Weather, Exchange, Price - 스마트가이드북 지침 완벽반영) -->
+        <section id="widgets" class="py-16 bg-white border-t border-slate-200 overflow-hidden">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-10">
+                    <span class="text-[#004098] font-black tracking-widest text-xs uppercase">LOCAL INFO</span>
+                    <h2 class="text-3xl font-bold text-slate-800 mt-2">출국 전 필수 현지 정보</h2>
+                    <p class="text-sm text-slate-500 mt-2">백두산 고산지대와 연길 시내의 기온 차이를 꼭 확인하세요!</p>
+                </div>
+
+                <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    <!-- 1. 날씨 & 옷차림 위젯 -->
+                    <div class="bg-slate-50 rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col lg:col-span-2">
+                        <h3 class="font-bold text-xl text-slate-800 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-cloud-sun text-blue-500"></i> 핵심 지역 7일 날씨 비교
+                        </h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4 flex-1">
+                            <!-- 이도백하 (백두산 초입) -->
+                            <div class="bg-white p-5 rounded-2xl border border-blue-100 shadow-sm flex flex-col">
+                                <h4 class="font-bold text-blue-700 text-md mb-3 flex items-center gap-2">
+                                    ⛰️ 이도백하(백두산) <span class="text-xs font-normal text-slate-400 border border-slate-200 px-2 py-0.5 rounded-full">고산 기후</span>
+                                </h4>
+                                <div id="weather-mt" class="flex overflow-x-auto lg:grid lg:grid-cols-7 pb-2 gap-2 custom-scrollbar">
+                                    <div class="flex items-center justify-center w-full h-24 text-slate-400 text-sm">날씨 정보를 불러오는 중...</div>
+                                </div>
+                            </div>
+
+                            <!-- 연길 -->
+                            <div class="bg-white p-5 rounded-2xl border border-emerald-100 shadow-sm flex flex-col">
+                                <h4 class="font-bold text-emerald-700 text-md mb-3 flex items-center gap-2">
+                                    🌆 연길 (Yanji) <span class="text-xs font-normal text-slate-400 border border-slate-200 px-2 py-0.5 rounded-full">여름 기후</span>
+                                </h4>
+                                <div id="weather-yanji" class="flex overflow-x-auto lg:grid lg:grid-cols-7 pb-2 gap-2 custom-scrollbar">
+                                    <div class="flex items-center justify-center w-full h-24 text-slate-400 text-sm">날씨 정보를 불러오는 중...</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 텍스트 필수 배치 원칙 -->
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 text-sm text-slate-600 leading-relaxed shadow-sm mt-auto">
+                            <p class="font-bold text-[#004098] mb-1"><i class="fa-solid fa-shirt mr-1"></i> 현지기후/실내에어컨 반영 맞춤 옷차림</p>
+                            연길 시내는 8월의 더운 <strong>여름 날씨</strong>이지만, <strong>백두산 천지(해발 2,744m) 부근은 한여름에도 초겨울처럼 매우 춥고 바람이 강하게 붑니다.</strong> 등정하시는 날을 위해 <strong>가을/초겨울용 두툼한 바람막이나 경량 패딩, 모자</strong>를 캐리어에 반드시 챙겨주세요! 식당이나 차량 내부 에어컨이 강할 수 있으니 얇은 가디건도 유용합니다.
+                        </div>
+                    </div>
+
+                    <!-- 2. 체감환율 위젯 -->
+                    <div class="bg-slate-50 rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col">
+                        <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center gap-2"><i class="fa-solid fa-calculator text-red-500"></i> 실시간 환율 계산기 (CNY ⇄ KRW)</h3>
+                        <div class="flex-1 flex flex-col justify-center items-center py-4">
+                            <div class="text-4xl font-black text-slate-800 mb-1" id="exchange-rate">-- 원</div>
+                            <div class="text-slate-500 font-medium text-sm mb-6">1 중국 위안(CNY) 당</div>
+                            
+                            <div class="w-full bg-white p-5 rounded-2xl border border-red-200 shadow-sm flex flex-col gap-4">
+                                <div class="flex justify-between items-center bg-slate-50 p-3 rounded-lg border border-slate-200">
+                                    <span class="font-bold text-slate-600">위안 (CNY)</span>
+                                    <input type="number" id="cny-input" value="100" class="w-24 text-right bg-transparent outline-none font-black text-xl text-slate-800" oninput="updateCalculator()">
+                                </div>
+                                <div class="flex justify-center text-slate-300"><i class="fa-solid fa-arrow-down"></i></div>
+                                <div class="flex justify-between items-center bg-red-50 p-3 rounded-lg border border-red-100">
+                                    <span class="font-bold text-red-700">원화 (KRW)</span>
+                                    <span class="font-black text-xl text-red-600" id="exchange-calc">-- 원</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 text-center mt-2">* 현찰 살 때 기준 송금 수수료 1.5%가 반영된 체감 환율입니다.</p>
+                    </div>
+
+                    <!-- 3. 현지 물가 5종 위젯 -->
+                    <div class="bg-slate-50 rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col">
+                        <h3 class="font-bold text-lg text-slate-800 mb-2 flex items-center gap-2"><i class="fa-solid fa-wallet text-amber-500"></i> 체감 물가 가이드 (5종)</h3>
+                        <p class="text-xs text-slate-500 mb-4">* 표기된 물가는 <strong>평균적인 관광지/매장 기준</strong>입니다.</p>
+                        <div class="flex-1 space-y-3" id="price-container">
+                            <!-- JS Rendered -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Map Section (스마트가이드북 지도 5원칙 적용) -->
+        <section id="map-section" class="py-12 bg-slate-50 border-t border-slate-200">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-8">
+                    <span class="text-[#004098] font-black tracking-widest text-xs uppercase">ROUTING MAP</span>
+                    <h2 class="text-3xl font-bold text-slate-800 mt-2">현지 일자별 동선 안내</h2>
+                    <p class="text-slate-500 mt-2 text-sm">일자별 버튼을 클릭하여 백두산 등정 및 연길 현지 이동 경로를 확인하세요.</p>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-2 mb-6 px-2">
+                    <button onclick="changeMapRoute('all')" class="map-btn active px-5 py-2 rounded-full border border-slate-300 bg-slate-800 text-white text-sm font-bold transition shadow-md">현지 전체여정</button>
+                    <button onclick="changeMapRoute('day1')" class="map-btn px-5 py-2 rounded-full border border-slate-300 bg-white text-slate-600 hover:bg-blue-50 text-sm font-bold transition">1일차</button>
+                    <button onclick="changeMapRoute('day2')" class="map-btn px-5 py-2 rounded-full border border-slate-300 bg-white text-slate-600 hover:bg-blue-50 text-sm font-bold transition">2일차</button>
+                    <button onclick="changeMapRoute('day3')" class="map-btn px-5 py-2 rounded-full border border-slate-300 bg-white text-slate-600 hover:bg-blue-50 text-sm font-bold transition">3일차</button>
+                    <button onclick="changeMapRoute('day4')" class="map-btn px-5 py-2 rounded-full border border-slate-300 bg-white text-slate-600 hover:bg-blue-50 text-sm font-bold transition">4일차</button>
+                </div>
+
+                <div class="max-w-5xl mx-auto border border-slate-200 rounded-2xl p-1 shadow-lg bg-white relative z-10">
+                    <div id="map"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 스마트 가이드북 상세일정 -->
+        <section id="schedule" class="py-16 bg-white border-t border-slate-200">
+            <div class="container mx-auto px-4">
+                <div class="max-w-5xl mx-auto">
+                    <div class="text-center mb-10 relative">
+                        <span class="inline-block bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm mb-3">OFFICIAL ITINERARY</span>
+                        <h2 class="text-3xl font-bold text-slate-800">일자별 상세 일정표</h2>
+                        <p class="text-sm text-slate-500 mt-2">행운회 고객님의 동선과 식사가 최적화된 맞춤형 스케줄입니다.</p>
+                        
+                        <button onclick="window.print()" class="mt-6 md:mt-0 md:absolute md:right-0 md:top-1/2 md:-translate-y-1/2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-bold py-2.5 px-5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 mx-auto md:mx-0 active:scale-95 animate-pulse">
+                            <i class="fa-solid fa-print"></i> 일정표 인쇄하기
+                        </button>
+                    </div>
+
+                    <!-- Web Tabs (4일차로 조정) -->
+                    <div class="flex overflow-x-auto no-scrollbar gap-2 mb-8 justify-start md:justify-center px-2 pb-2">
+                        <button class="tab-btn active shrink-0 px-6 py-3 rounded-2xl border-2 border-[#004098] bg-[#004098] text-white font-bold text-sm transition shadow-md" onclick="openTab(event, 'day1'); changeMapRoute('day1')">1일차 (8/5)</button>
+                        <button class="tab-btn shrink-0 px-6 py-3 rounded-2xl border-2 border-slate-200 bg-white text-slate-500 font-bold text-sm transition hover:bg-blue-50" onclick="openTab(event, 'day2'); changeMapRoute('day2')">2일차 (8/6)</button>
+                        <button class="tab-btn shrink-0 px-6 py-3 rounded-2xl border-2 border-slate-200 bg-white text-slate-500 font-bold text-sm transition hover:bg-blue-50" onclick="openTab(event, 'day3'); changeMapRoute('day3')">3일차 (8/7)</button>
+                        <button class="tab-btn shrink-0 px-6 py-3 rounded-2xl border-2 border-slate-200 bg-white text-slate-500 font-bold text-sm transition hover:bg-blue-50" onclick="openTab(event, 'day4'); changeMapRoute('day4')">4일차 (8/8)</button>
+                    </div>
+
+                    <!-- Web Content -->
+                    <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
+                        
+                        <!-- Day 1 -->
+                        <div id="day1" class="tab-content animate-fade-in-up p-6 md:p-10">
+                            <h3 class="font-bold text-2xl text-slate-800 mb-6 border-b pb-4"><i class="fa-solid fa-plane-arrival text-[#004098] mr-2"></i> 연길 도착 및 두만강 도문 투어</h3>
+                            <div class="relative border-l-2 border-blue-200 ml-4 pl-8 space-y-8">
+                                <div class="relative">
+                                    <div class="timeline-dot bg-blue-600 ring-blue-100"></div>
+                                    <h4 class="font-bold text-lg text-slate-800">🛫 11:50 청주 국제공항 출발</h4>
+                                    <p class="text-slate-600 text-sm mt-2 leading-relaxed">티웨이항공(TW685)편을 이용하여 중국 연길로 향합니다. (약 2시간 35분 비행)</p>
+                                </div>
+                                <div class="relative">
+                                    <div class="timeline-dot bg-blue-500 ring-blue-100"></div>
+                                    <h4 class="font-bold text-lg text-slate-800">🛬 13:25 연길 국제공항 도착 & 환영 미팅</h4>
+                                    <p class="text-slate-600 text-sm mt-2 leading-relaxed">수하물 수취 후 출구에서 단독 가이드와 반갑게 미팅합니다. 전용 리무진 차량 탑승.<br>
+                                    <span class="text-amber-600 font-bold text-xs">※ 특전: 웰컴 과일도시락 1인 1개 제공</span></p>
+                                </div>
+                                <div class="relative">
+                                    <div class="timeline-dot bg-blue-500 ring-blue-100"></div>
+                                    <h4 class="font-bold text-lg text-slate-800">🚌 도문으로 이동 (약 1시간 소요) 및 투어</h4>
+                                    <p class="text-slate-700 font-medium text-sm mt-2 leading-relaxed bg-blue-50 p-4 rounded-xl border border-blue-100">
+                                        • <strong>두만강공원:</strong> 북한과 경계를 이루는 두만강 전경 감상<br>
+                                        • <strong>북한 조망:</strong> 북한과 육로로 연결되는 단교, 남양열차역 등 생생한 분단의 현장 시찰<br>
+                                        • <strong><span class="text-[#004098]">★특전:</span> 두만강 뗏목 보트 탑승 체험</strong>
+                                    </p>
+                                </div>
+                                <div class="relative">
+                                    <div class="timeline-dot bg-blue-500 ring-blue-100"></div>
+                                    <h4 class="font-bold text-lg text-slate-800">석식 (돌솥밥+요리) 후 백두산 관문, 이도백하 이동</h4>
+                                    <p class="text-slate-600 text-sm mt-2 leading-relaxed">식사 후 약 2시간을 이동하여 백두산 등정을 위한 거점 도시인 이도백하에 도착합니다.</p>
+                                </div>
+                                <div class="relative">
+                                    <div class="timeline-dot bg-slate-800 ring-slate-200"></div>
+                                    <div class="bg-slate-800 text-white p-5 rounded-2xl shadow-lg mt-2 relative overflow-hidden">
+                                        <div class="absolute right-0 bottom-0 opacity-10 text-7xl"><i class="fa-solid fa-moon"></i></div>
+                                        <h4 class="font-bold text-lg text-amber-300 mb-2"><i class="fa-solid fa-bed mr-2"></i> 호텔 투숙 및 휴식</h4>
+                                        <p class="text-sm text-slate-200">▶ <strong>금수학온천 / 장백천지 / 산수천 / 운수란정온천 중 (준5성급)</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Day 2 -->
+                        <div id="day2" class="tab-content hidden animate-fade-in-up p-6 md:p-10">
+                            <h3 class="font-bold text-2xl text-slate-800 mb-6 border-b pb-4"><i class="fa-solid fa-leaf text-emerald-600 mr-2"></i> 백두산 서파 대자연 & 천지 자율 등정</h3>
+                            <div class="relative border-l-2 border-emerald-300 ml-4 pl-8 space-y-8">
+                                <div class="relative">
+                                    <div class="timeline-dot bg-emerald-500 ring-emerald-100"></div>
+                                    <h4 class="font-bold text-lg text-slate-800">호텔 조식 후 서파 산문으로 이동 (1시간 30분)</h4>
+                                </div>
+                                <div class="relative">
+                                    <div class="timeline-dot bg-emerald-600 ring-emerald-200"></div>
+                                    <h4 class="font-bold text-xl text-emerald-700">🌿 백두산 서파(West Slope) 코스 투어</h4>
+                                    <p class="text-slate-700 font-medium text-sm mt-2 leading-relaxed bg-emerald-50 p-4 rounded-xl border border-emerald-200">
+                                        셔틀버스를 탑승하고 백두산의 광활한 자연으로 들어갑니다.<br><br>
+                                        • <strong>금강대협곡:</strong> 화산 활동이 만들어낸 대자연의 웅장한 그랜드 캐니언<br>
+                                        • <strong>서파 천지 자율등정:</strong> 1,440여 개의 계단을 오르며 마주하는 탁 트인 천지의 장관과 북한 경계비 조망
+                                    </p>
+                                </div>
+                                <div class="relative">
+                                    <div class="timeline-dot bg-emerald-500 ring-emerald-100"></div>
+                                    <h4 class="font-bold text-lg text-slate-800">현지식 중식 (산내 비빔밥)</h4>
+                                </div>
+                                <div class="relative">
+                                    <div class="timeline-dot bg-emerald-500 ring-emerald-100"></div>
+                                    <h4 class="font-bold text-lg text-slate-800">이도백하로 하산 및 시내 관광</h4>
+                                    <p class="text-slate-600 text-sm mt-2 leading-relaxed">
+                                        • <strong><span class="text-[#004098]">★특전:</span> 5D 플라잉 장백산 관람</strong> (백두산의 사계와 명승지를 나는 듯한 환상적인 체험)<br>
+                                        • <strong>운정시장:</strong> 백두산 자연과 어우러지는 여행자 야시장 탐방<br>
+                                        • <strong>미인송공원:</strong> 미인처럼 쭉 뻗은 소나무 군락 산책
+                                    </p>
+                                </div>
+                                <div class="relative">
+                                    <div class="timeline-dot bg-slate-800 ring-slate-200"></div>
+                                    <div class="bg-slate-800 text-white p-5 rounded-2xl shadow-lg mt-2 relative overflow-hidden">
+                                        <div class="absolute right-0 bottom-0 opacity-10 text-7xl"><i class="fa-solid fa-moon"></i></div>
+                                        <h4 class="font-bold text-lg text-amber-300 mb-2">저녁 식사 및 연박</h4>
+                                        <p class="text-sm text-slate-200 mb-1">▶ 석식: 삼겹살 (무제한 제공 특식)</p>
+                                        <p class="text-sm text-slate-200">▶ <strong>금수학온천 동급 준5성 호텔</strong> (연박)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Day 3 -->
+                        <div id="day3" class="tab-content hidden animate-fade-in-up p-6 md:p-10">
+                            <h3 class="font-bold text-2xl text-slate-800 mb-6 border-b pb-4"><i class="fa-solid fa-mountain text-[#004098] mr-2"></i> 장엄한 백두산 북파 등정 및 마사지 힐링</h3>
+                            <div class="relative border-l-2 border-blue-200 ml-4 pl-8 space-y-8">
+                                <div class="relative">
+                                    <div class="timeline-dot bg-blue-500 ring-blue-100"></div>
+                                    <h4 class="font-bold text-lg text-slate-800">호텔 조식 후 북파 산문으로 이동 (30분)</h4>
+                                </div>
+                                <div class="relative">
+                                    <div class="timeline-dot bg-[#004098] ring-blue-200"></div>
+                                    <h4 class="font-bold text-xl text-[#004098]">⛰️ 백두산 북파(North Slope) 코스 투어</h4>
+                                    <p class="text-slate-700 font-medium text-sm mt-2 leading-relaxed bg-blue-50 p-4 rounded-xl border border-blue-100">
+                                        환보버스와 짚차를 번갈아 타고 편안하고 아찔하게 정상으로 직행합니다.<br><br>
+                                        • <strong>천문봉 & 천지:</strong> 짚차를 타고 등정 후 발밑으로 펼쳐지는 장엄한 호수 조망<br>
+                                        • <strong>장백폭포 지구:</strong> 한겨울에도 얼지 않고 떨어지는 웅장한 폭포<br>
+                                        • <strong>백두산 온천지대:</strong> 화산의 숨결을 뿜어내는 뜨거운 자연 온천수 지대 관광
+                                    </p>
+                                </div>
+                                <div class="relative">
+                                    <div class="timeline-dot bg-blue-500 ring-blue-100"></div>
+                                    <h4 class="font-bold text-lg text-slate-800">하산 후 현지식 중식 및 연길로 이동 (2시간 30분)</h4>
+                                </div>
+                                <div class="relative">
+                                    <div class="timeline-dot bg-purple-500 ring-purple-200"></div>
+                                    <h4 class="font-bold text-lg text-slate-800">💆‍♀️ <span class="text-purple-600">★특전:</span> 발+전신 마사지 (90분)</h4>
+                                    <p class="text-slate-600 text-sm mt-2">이틀간의 백두산 등정으로 쌓인 피로를 전문가의 손길로 완벽히 풀어냅니다. (매너팁 별도)</p>
+                                </div>
+                                <div class="relative">
+                                    <div class="timeline-dot bg-slate-800 ring-slate-200"></div>
+                                    <div class="bg-slate-800 text-white p-5 rounded-2xl shadow-lg mt-2 relative overflow-hidden">
+                                        <div class="absolute right-0 bottom-0 opacity-10 text-7xl"><i class="fa-solid fa-moon"></i></div>
+                                        <h4 class="font-bold text-lg text-amber-300 mb-2"><i class="fa-solid fa-utensils mr-2"></i> 연길의 불야성 야경 & 호텔 투숙</h4>
+                                        <p class="text-sm text-slate-200 mb-1">▶ <strong>석식: 양꼬치 무제한 제공 + 맥주 1인 2병</strong></p>
+                                        <p class="text-sm text-slate-200 mb-1">▶ 불야성 미식가 (여행의 밤거리를 만끽하는 시민휴식처 자유시간)</p>
+                                        <p class="text-sm text-slate-200 mt-2">▶ <strong>숙소: 비암산 온천호텔 또는 동급 (준5성급)</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Day 4 -->
+                        <div id="day4" class="tab-content hidden animate-fade-in-up p-6 md:p-10">
+                            <h3 class="font-bold text-2xl text-slate-800 mb-6 border-b pb-4"><i class="fa-solid fa-plane-departure text-[#004098] mr-2"></i> 용정 문화 탐방 및 귀국길</h3>
+                            <div class="relative border-l-2 border-blue-200 ml-4 pl-8 space-y-8">
+                                <div class="relative">
+                                    <div class="timeline-dot bg-blue-500 ring-blue-100"></div>
+                                    <h4 class="font-bold text-lg text-slate-800">호텔 조식 후 민족문화 탐방</h4>
+                                    <p class="text-slate-600 text-sm mt-2 leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-100">
+                                        민족 가곡 '선구자'에 등장하는 <strong>일송정, 해란강, 용문교</strong> 등 용정 지역의 유서 깊은 명소들을 차창과 전망을 통해 조망합니다.
+                                    </p>
+                                </div>
+                                <div class="relative">
+                                    <div class="timeline-dot bg-blue-500 ring-blue-100"></div>
+                                    <h4 class="font-bold text-lg text-slate-800">특식 중식 (연변냉면 + 꿔바러우)</h4>
+                                </div>
+                                <div class="relative">
+                                    <div class="timeline-dot bg-slate-800 ring-slate-200"></div>
+                                    <h4 class="font-bold text-lg text-slate-800">연길 공항으로 이동 및 국제선 탑승수속</h4>
+                                </div>
+                                <div class="relative">
+                                    <div class="timeline-dot bg-slate-800 ring-slate-200"></div>
+                                    <h4 class="font-bold text-lg text-slate-800">🛫 14:25 연길 공항 출발</h4>
+                                    <p class="text-slate-600 text-sm mt-2">티웨이항공(TW686)편에 탑승하여 귀국길에 오릅니다.</p>
+                                </div>
+                                <div class="relative">
+                                    <div class="timeline-dot bg-slate-800 ring-slate-200"></div>
+                                    <h4 class="font-bold text-lg text-slate-800">🛬 18:15 청주 국제공항 도착</h4>
+                                    <p class="text-slate-600 text-sm mt-2">수고하셨습니다. 백두산의 맑은 정기가 행운회 회원님들의 일상에 가득하시길 바랍니다.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🏨 Accommodation Section -->
+        <section id="accommodations" class="py-16 bg-slate-50 border-t border-slate-200 print:hidden">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <span class="text-emerald-700 font-black tracking-widest text-xs uppercase">ACCOMMODATION</span>
+                    <h2 class="text-3xl font-bold text-slate-800 mt-2">프리미엄 숙소 안내</h2>
+                    <p class="text-sm text-slate-500 mt-2">장거리 투어의 피로를 녹여줄 준5성급 컨디션의 숙소입니다.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                    <!-- Erdaobaihe Hotel -->
+                    <div class="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-lg hover:shadow-xl transition-shadow flex flex-col">
+                        <div class="h-64 overflow-hidden relative">
+                            <img src="https://images.openai.com/static-rsc-4/ydMNxxnUy5Nspo03YTDGgwPOPT-yEa0-SVWyShGTdnpBaEsrH8IyrISY6n2tKsvw_azcV4Ij0qreRuIrCRQyoCmwUTQepItzdtxDnn6Y1mPQOi3lSh-yQFQzPFnK10qo-nMe7l4W7rkoci_Ae-leSjyuwAvp-7ftoVQZ6F8akV8?purpose=inline" alt="Erdaobaihe Hot Spring Hotel" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-4 left-4 bg-amber-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">이도백하 (1, 2일차)</div>
+                        </div>
+                        <div class="p-6 md:p-8 flex-1 flex flex-col">
+                            <h3 class="text-xl font-bold text-slate-800 mb-4">🏨 이도백하 준5성급 온천 호텔</h3>
+                            <ul class="space-y-3 text-sm text-slate-600 flex-1">
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-amber-500"></i> <span><strong>위치:</strong> 백두산 북파 입구 도시 이도백하</span></li>
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-star mt-1 text-amber-500"></i> <span><strong>등급:</strong> 준5성급 (금수학/장백천지/산수천/운수란정 중 배정)</span></li>
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-hot-tub-person mt-1 text-amber-500"></i> <span><strong>특징:</strong> 유황 온천 <strong class="text-amber-600">(핵심 셀링 포인트)</strong></span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Yanji Hotel -->
+                    <div class="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-lg hover:shadow-xl transition-shadow flex flex-col">
+                        <div class="h-64 overflow-hidden relative">
+                            <img src="https://images.openai.com/static-rsc-4/Een81k2TZbVICrZw_616lfozLl1KjoBs4mq3KRECgf71CrroBxuYqcNYb2auDgYkd4RtolOX4vjV4ev5P6Xij93BGOcF7uUPYlG0eu85IX22ItytjX8ZpA9aGMjSrY77V6REv9xbaD5Ul3accK_6QadKTt3wKh6Q2mAy2FLsEjE?purpose=inline" alt="Yanji Hotel" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-4 left-4 bg-emerald-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">연길 (3일차)</div>
+                        </div>
+                        <div class="p-6 md:p-8 flex-1 flex flex-col">
+                            <h3 class="text-xl md:text-2xl font-bold text-slate-800 mb-4">🏨 연길 준5성급 특급 호텔</h3>
+                            <ul class="space-y-3 text-sm text-slate-600 flex-1">
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-emerald-500"></i> <span><strong>위치:</strong> 연길 (Yanji) / 입출국 전후 1박 숙소 활용</span></li>
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-star mt-1 text-emerald-500"></i> <span><strong>등급:</strong> 준5성급 특급 호텔</span></li>
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-spa mt-1 text-emerald-500"></i> <span><strong>특징:</strong> 온천시설 보유, 민속촌 인접</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🗣️ Survival Phrases Section (스마트가이드북 원칙: 단일함수, 중국어 버전) -->
+        <section id="survival" class="py-16 bg-[#f0f4ff] border-t border-blue-100 print:hidden">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-10">
+                    <span class="text-[#004098] font-black tracking-widest text-xs uppercase">SURVIVAL PHRASES</span>
+                    <h2 class="text-3xl font-bold text-slate-800 mt-2">원클릭 현지(중국어) 생존 회화</h2>
+                    <p class="text-slate-500 mt-2 text-sm">중국어를 몰라도 터치 한 번이면 끝! 현지인에게 화면을 보여주세요.</p>
+                </div>
+                
+                <div class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <!-- Buttons -->
+                    <button onclick="showPhrase('🍽️', '메뉴판 주세요', '请给我菜单', '칭 게이 워 차이딴')" class="bg-white p-4 rounded-2xl shadow-sm hover:shadow-md border border-blue-100 transition flex flex-col items-center gap-2">
+                        <span class="text-3xl">🍽️</span><span class="font-bold text-slate-700 text-sm">메뉴판 요청</span>
+                    </button>
+                    <button onclick="showPhrase('👍', '정말 맛있어요!', '很好吃', '헌 하오츠')" class="bg-white p-4 rounded-2xl shadow-sm hover:shadow-md border border-blue-100 transition flex flex-col items-center gap-2">
+                        <span class="text-3xl">👍</span><span class="font-bold text-slate-700 text-sm">맛있어요</span>
+                    </button>
+                    <button onclick="showPhrase('🌿', '고수 빼주세요 (매우 중요!)', '不要香菜', '부야오 샹차이')" class="bg-white p-4 rounded-2xl shadow-sm hover:shadow-md border border-blue-100 transition flex flex-col items-center gap-2">
+                        <span class="text-3xl">🌿</span><span class="font-bold text-slate-700 text-sm">고수 빼주세요</span>
+                    </button>
+                    <button onclick="showPhrase('💧', '얼음물 한 잔 주세요', '给我冰水', '게이 워 삥 슈웨이')" class="bg-white p-4 rounded-2xl shadow-sm hover:shadow-md border border-blue-100 transition flex flex-col items-center gap-2">
+                        <span class="text-3xl">💧</span><span class="font-bold text-slate-700 text-sm">얼음물 요청</span>
+                    </button>
+                    <button onclick="showPhrase('💳', '계산할게요 (빌지 주세요)', '买单', '마이딴')" class="bg-white p-4 rounded-2xl shadow-sm hover:shadow-md border border-blue-100 transition flex flex-col items-center gap-2">
+                        <span class="text-3xl">💳</span><span class="font-bold text-slate-700 text-sm">계산요청</span>
+                    </button>
+                    <button onclick="showPhrase('💰', '이거 얼마예요?', '多少钱？', '뚜어샤오 치엔?')" class="bg-white p-4 rounded-2xl shadow-sm hover:shadow-md border border-blue-100 transition flex flex-col items-center gap-2">
+                        <span class="text-3xl">💰</span><span class="font-bold text-slate-700 text-sm">가격문의</span>
+                    </button>
+                    <button onclick="showPhrase('💸', '너무 비싸요. 깎아주세요.', '太贵了, 便宜点吧', '타이 꾸이 러, 피엔이 띠엔 바')" class="bg-white p-4 rounded-2xl shadow-sm hover:shadow-md border border-blue-100 transition flex flex-col items-center gap-2">
+                        <span class="text-3xl">💸</span><span class="font-bold text-slate-700 text-sm">흥정하기</span>
+                    </button>
+                    <button onclick="showPhrase('🚽', '화장실이 어디인가요?', '洗手间在哪里？', '시쇼우지앤 자이 나리?')" class="bg-white p-4 rounded-2xl shadow-sm hover:shadow-md border border-blue-100 transition flex flex-col items-center gap-2">
+                        <span class="text-3xl">🚽</span><span class="font-bold text-slate-700 text-sm">화장실</span>
+                    </button>
+                    <button onclick="showPhrase('🙏', '감사합니다', '谢谢', '시에시에')" class="bg-white p-4 rounded-2xl shadow-sm hover:shadow-md border border-blue-100 transition flex flex-col items-center gap-2">
+                        <span class="text-3xl">🙏</span><span class="font-bold text-slate-700 text-sm">감사</span>
+                    </button>
+                    <button onclick="showPhrase('🚨', '도와주세요! 긴급상황입니다.', '救命！', '지우밍!')" class="bg-white p-4 rounded-2xl shadow-sm hover:shadow-md border border-red-200 transition flex flex-col items-center gap-2">
+                        <span class="text-3xl">🚨</span><span class="font-bold text-red-600 text-sm">긴급도움</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Checklist & Memo Section -->
+        <section id="check" class="py-16 bg-white border-t border-slate-100">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-10">
+                    <span class="text-blue-600 font-black tracking-widest text-xs uppercase">PREPARE</span>
+                    <h2 class="text-3xl font-bold text-slate-800 mt-2">출국 전 꼼꼼 체크 & 여행 메모</h2>
+                    <p class="text-sm text-slate-500 mt-2">입력하신 메모와 체크 내역은 본 기기에 자동 저장됩니다.</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                    <!-- 체크리스트 -->
+                    <div class="bg-slate-50 p-6 rounded-3xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center gap-2"><i class="fa-solid fa-list-check text-blue-500"></i> 필수 준비물 체크리스트</h3>
+                        <div id="checklist-container" class="space-y-3 flex-1">
+                            <!-- JS Generated -->
+                        </div>
+                    </div>
+                    
+                    <!-- 여행 메모장 -->
+                    <div class="bg-amber-50 p-6 rounded-3xl border border-amber-200 shadow-sm flex flex-col">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-lg text-amber-800 flex items-center gap-2"><i class="fa-solid fa-pen-clip text-amber-600"></i> 나의 여행 메모장</h3>
+                            <button onclick="clearMemo()" class="text-[10px] bg-white border border-amber-300 text-amber-700 px-2 py-1 rounded hover:bg-amber-100 transition">내용 지우기</button>
+                        </div>
+                        <textarea id="travel-memo" class="flex-1 w-full min-h-[250px] md:min-h-[auto] bg-white p-4 rounded-xl border border-amber-300 text-slate-700 resize-none overflow-y-auto focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-inner" placeholder="개별 약품, 쇼핑 리스트, 혹은 여행 중 떠오르는 영감들을 자유롭게 적어보세요."></textarea>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🌿 ESG Dashboard (스마트가이드북 원칙 고정 탑재) -->
+        <section class="py-12 bg-[#0f342b] text-white border-t border-[#09201a] print:hidden">
+            <div class="container mx-auto px-4 text-center">
+                <span class="inline-block bg-[#164a3d] text-emerald-300 text-xs px-3 py-1 rounded-full font-bold shadow-sm mb-3 border border-[#1d604f]">
+                    <i class="fa-solid fa-leaf"></i> Eco-Friendly Tour
+                </span>
+                <h2 class="text-2xl font-bold mb-6">종이 없는 친환경 여행 실천</h2>
+                <div class="grid grid-cols-3 gap-4 max-w-3xl mx-auto mb-6">
+                    <div class="bg-[#164a3d] rounded-2xl p-4 border border-[#1d604f]">
+                        <h4 class="text-emerald-300 text-xs font-bold mb-1">종이 절감</h4>
+                        <p class="text-2xl font-black">8<span class="text-sm font-medium text-emerald-400 ml-1">장</span></p>
+                    </div>
+                    <div class="bg-[#164a3d] rounded-2xl p-4 border border-[#1d604f]">
+                        <h4 class="text-emerald-300 text-xs font-bold mb-1">탄소 배출 감소</h4>
+                        <p class="text-2xl font-black">38<span class="text-sm font-medium text-emerald-400 ml-1">g</span></p>
+                    </div>
+                    <div class="bg-[#164a3d] rounded-2xl p-4 border border-[#1d604f]">
+                        <h4 class="text-emerald-300 text-xs font-bold mb-1">물 절약</h4>
+                        <p class="text-2xl font-black">75<span class="text-sm font-medium text-emerald-400 ml-1">L</span></p>
+                    </div>
+                </div>
+                <p class="text-emerald-100 text-xs max-w-2xl mx-auto leading-relaxed">
+                    본 행사는 스마트 가이드북 도입을 통해 참여 인원 비례 약 1그루의 나무를 심는 효과를 거두었으며, 디지털 전환(DX)을 통한 공공부문 에너지 절약 실천의 모범 사례입니다. (1인당 기준)
+                </p>
+            </div>
+        </section>
+
+        <!-- Footer (스마트가이드북 푸터 원칙 반영) -->
+        <footer class="bg-[#f8f9fa] py-12 border-t border-slate-200 text-center">
+            <div class="container mx-auto px-4">
+                <div class="mb-6">
+                    <a href="http://tourmaker.kr" target="_blank" class="inline-block border border-slate-300 rounded-xl px-6 py-3 bg-white text-slate-700 font-bold hover:bg-slate-50 transition-all shadow-sm text-sm">
+                        <i class="fa-solid fa-home mr-1"></i> 투어메이커 공식 홈페이지
+                    </a>
+                </div>
+                <p class="text-[12px] text-[#6c757d] font-normal max-w-2xl mx-auto leading-relaxed text-center">
+                    [System Powered by TOURMAKER] 본 스마트 가이드북은 **행운회**의 기획과 투어메이커의 트래블 테크 기술 제휴로 제작되었습니다.
+                </p>
+                <p class="text-[10px] text-slate-400 mt-4">&copy; 2026 Tourmaker Inc. All rights reserved.</p>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- 🖨️ Print-Only Area (표준 일정표 양식 100% 반영) -->
+    <div id="print-area" class="hidden print:block w-full bg-white text-black py-2">
+        <div class="print-page-container">
+            <!-- Header -->
+            <div class="print-header">
+                <div class="logo">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgHfgIX70O5k6Anuo0UgALIdaG9jSga9auHu3uyz0uEirylGPAJnjN_qQbvEGMUvPqUQf_g9FMNUHRxlDcUBf4vZ3Mpy4TnA9WxbmzWYK11gt2zuy_Irl4wctNFjcjLyPo0GPXV792o_J7L9guRMuDfeC1gy7USwywjYbECZgzcsHybuGRRAXAnO1eNmP8/s320/logo.png" alt="투어메이커 로고">
+                </div>
+                <div class="doc-info">
+                    문서번호: TM-260805-LUCKY
+                </div>
+            </div>
+
+            <!-- Title -->
+            <div class="print-title-section">
+                <h1>행운회 청주출발 연길 백두산(서파+북파) 3박 4일 단독투어</h1>
+            </div>
+
+            <!-- Slim Overview -->
+            <div class="print-overview-slim">
+                <div><span class="label">행사기간</span> 2026. 08. 05 (수) ~ 08. 08 (토)</div>
+                <div><span class="label">행사조건</span> 행운회 8명 단독 (쇼핑 2회, 노옵션)</div>
+                <div><span class="label">이용항공</span> 티웨이항공 (TW685/TW686)</div>
+            </div>
+
+            <!-- Itinerary Table (11% / 75% / 14%) -->
+            <table class="print-table">
+                <thead>
+                    <tr>
+                        <th class="print-col-date">일자</th>
+                        <th class="print-col-desc">상세 탐방 일정 및 동선 점검</th>
+                        <th class="print-col-meal">식사</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Day 1 -->
+                    <tr class="print-day-divider">
+                        <td class="print-col-date"><strong>1일차</strong><br>8/5 (수)</td>
+                        <td class="print-col-desc">
+                            <div class="print-time-flow"><span class="print-time-tag">11:50</span> 청주 국제공항 출발 (TW685)</div>
+                            <div class="print-time-flow"><span class="print-time-tag">13:25</span> 연길 국제공항 도착 및 가이드 미팅</div>
+                            <ul class="print-desc-list">
+                                <li>[전용차량] 도문으로 이동 (약 1시간) <span class="print-highlight">※ 웰컴 과일 1인 1개 제공</span></li>
+                                <li>북한과 경계를 이루는 두만강 조망: <span class="print-highlight">두만강공원</span></li>
+                                <li>북한과 육로로 연결되는 단교 및 남양열차역 조망</li>
+                                <li><span style="font-weight: 700; color: #004098;">★ 두만강 뗏목 보트 탑승 포함</span></li>
+                                <li>석식 후 이도백하로 이동 (약 2시간) 및 호텔 투숙</li>
+                            </ul>
+                            <hr class="print-hotel-divider">
+                            <div class="print-hotel-info">🏨 호텔 : 금수학온천/장백천지/산수천/운수란정 중 1 (준5성급)</div>
+                        </td>
+                        <td class="print-col-meal">
+                            <div class="print-meal-wrapper">
+                                <div class="print-meal-simple"><strong>조:</strong><div class="print-meal-menu">-</div></div>
+                                <div class="print-meal-simple"><strong>중:</strong><div class="print-meal-menu">도시락 제공</div></div>
+                                <div class="print-meal-simple"><strong>석:</strong><div class="print-meal-menu">돌솥밥+요리</div></div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Day 2 -->
+                    <tr class="print-day-divider">
+                        <td class="print-col-date"><strong>2일차</strong><br>8/6 (목)</td>
+                        <td class="print-col-desc">
+                            <div class="print-time-flow"><span class="print-time-tag">오전</span> 호텔 조식 후 서파 산문으로 이동 (1.5시간)</div>
+                            <ul class="print-desc-list">
+                                <li>화산활동이 만들어낸 대자연 <span class="print-highlight">금강대협곡</span></li>
+                                <li><span class="print-highlight">서파 천지 자율등정</span> (1,440여 계단) 및 북한경계비 조망</li>
+                                <li>하산 후 이도백하로 이동 (1.5시간)</li>
+                                <li><span style="font-weight: 700; color: #004098;">★ 특전: 5D플라잉 장백산 관람 (백두산 사계 감상)</span></li>
+                                <li>여행자 야시장 <span class="print-highlight">운정시장</span> 및 소나무 군락 <span class="print-highlight">미인송공원</span></li>
+                            </ul>
+                            <hr class="print-hotel-divider">
+                            <div class="print-hotel-info">🏨 호텔 : 금수학온천/장백천지/산수천/운수란정 중 1 연박</div>
+                        </td>
+                        <td class="print-col-meal">
+                            <div class="print-meal-wrapper">
+                                <div class="print-meal-simple"><strong>조:</strong><div class="print-meal-menu">호텔식</div></div>
+                                <div class="print-meal-simple"><strong>중:</strong><div class="print-meal-menu">비빔밥(산내)</div></div>
+                                <div class="print-meal-simple"><strong>석:</strong><div class="print-meal-menu">삼겹살 무제한</div></div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Day 3 -->
+                    <tr class="print-day-divider">
+                        <td class="print-col-date"><strong>3일차</strong><br>8/7 (금)</td>
+                        <td class="print-col-desc">
+                            <div class="print-time-flow"><span class="print-time-tag">오전</span> 호텔 조식 후 북파 산문으로 이동 (30분)</div>
+                            <ul class="print-desc-list">
+                                <li><span class="print-highlight">북파</span> 환보버스 및 짚차 탑승하여 천문봉 등정 및 천지 조망</li>
+                                <li><span class="print-highlight">장백폭포 지구</span> 및 <span class="print-highlight">백두산 온천지대</span> 관광</li>
+                                <li>연길로 이동 (2.5시간)</li>
+                                <li><span style="font-weight: 700; color: #004098;">★ 특전: 여행의 피로를 푸는 발+전신마사지 (90분) ※팁별도</span></li>
+                                <li>시민휴식처 여행거리 <span class="print-highlight">불야성 미식가</span> 자유시간 및 호텔 투숙</li>
+                            </ul>
+                            <hr class="print-hotel-divider">
+                            <div class="print-hotel-info">🏨 호텔 : 비암산 온천호텔 또는 동급 (준5성급)</div>
+                        </td>
+                        <td class="print-col-meal">
+                            <div class="print-meal-wrapper">
+                                <div class="print-meal-simple"><strong>조:</strong><div class="print-meal-menu">호텔식</div></div>
+                                <div class="print-meal-simple"><strong>중:</strong><div class="print-meal-menu">현지식</div></div>
+                                <div class="print-meal-simple"><strong>석:</strong><div class="print-meal-menu">양꼬치 무제한<span class="print-meal-sub">(+맥주2병)</span></div></div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Day 4 -->
+                    <tr class="print-day-divider">
+                        <td class="print-col-date"><strong>4일차</strong><br>8/8 (토)</td>
+                        <td class="print-col-desc">
+                            <div class="print-time-flow"><span class="print-time-tag">오전</span> 호텔 조식 후 민족문화 탐방 투어 진행</div>
+                            <ul class="print-desc-list">
+                                <li>민족가곡 선구자에 등장하는 <span class="print-highlight">일송정, 해란강, 용문교 조망 투어</span></li>
+                                <li>연길 공항으로 이동 (30분) 후 국제선 탑승수속 진행</li>
+                            </ul>
+                            <div class="print-time-flow" style="margin-top: 8px;"><span class="print-time-tag">14:25</span> 연길 국제공항 출발 (TW686)</div>
+                            <div class="print-time-flow"><span class="print-time-tag">18:15</span> 청주 국제공항 도착 후 해산</div>
+                        </td>
+                        <td class="print-col-meal">
+                            <div class="print-meal-wrapper">
+                                <div class="print-meal-simple"><strong>조:</strong><div class="print-meal-menu">호텔식</div></div>
+                                <div class="print-meal-simple"><strong>중:</strong><div class="print-meal-menu">냉면+꿔바로우</div></div>
+                                <div class="print-meal-simple"><strong>석:</strong><div class="print-meal-menu">-</div></div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="print-remarks">
+                ※ 상기 일정은 항공기 연발착 및 현지 기상 사정에 따라 다소 변경될 수 있습니다.<br>
+                ※ 전 일정 8인 단독, 쇼핑 2회 + 노옵션 진행 (쇼핑 1회로 진행 시 1인 3만원 인상)<br>
+                ※ 중국 입국 시 여권 유효기간 6개월 이상 남아 있어야 하며, 온라인 전자입국 신고서 작성이 필요합니다.
+            </div>
+
+            <!-- Footer -->
+            <div class="print-footer-box">
+                <div class="print-manager-info">
+                    <div class="names">담당 및 진행 : 대표 이재명 010-9443-7881</div>
+                    <div style="font-size: 11px; color:#64748b; margin-top: 4px;">[System Powered by TOURMAKER]</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 생존 회화 모달 (Modal) -->
+    <div id="phrase-modal" class="fixed inset-0 bg-black/90 z-[9999] hidden flex-col items-center justify-center p-6" onclick="closePhrase()">
+        <button class="absolute top-6 right-6 text-white text-4xl font-bold">&times;</button>
+        <div class="text-center space-y-6 max-w-lg w-full bg-slate-900 border border-slate-700 p-8 rounded-3xl relative" onclick="event.stopPropagation()">
+            <div id="modal-emoji" class="text-7xl mb-2"></div>
+            <div id="modal-kr" class="text-white text-xl font-bold opacity-80"></div>
+            <div class="bg-blue-600 w-12 h-1 mx-auto rounded-full my-4"></div>
+            <div id="modal-local" class="text-yellow-400 font-black text-3xl md:text-5xl leading-tight tracking-widest"></div>
+            <div id="modal-pron" class="text-blue-300 text-lg mt-2 font-medium bg-blue-900/50 inline-block px-4 py-1 rounded-full"></div>
+            <div class="mt-8 pt-6 border-t border-slate-700 text-slate-400 text-sm animate-pulse">
+                <i class="fa-solid fa-mobile-screen-button text-xl block mb-2"></i> 이 화면을 현지인에게 보여주세요
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // --- 1. D-Day 및 행사 상태 로직 (스마트가이드북 원칙 적용) ---
+        const startDate = new Date('2026-08-05T00:00:00+09:00');
+        const endDate = new Date('2026-08-08T23:59:59+09:00');
+        const now = new Date();
+        const badge = document.getElementById('d-day-badge');
+        const heroText = document.getElementById('hero-status-text');
+
+        if(now < startDate) {
+            const diff = Math.ceil((startDate - now) / (1000*60*60*24));
+            badge.textContent = `D-${diff}`;
+            badge.className = "bg-[#004098] text-white text-[10px] px-2 py-0.5 rounded-full font-bold animate-pulse";
+        } else if (now >= startDate && now <= endDate) {
+            const currentDay = Math.floor((now - startDate) / (1000*60*60*24)) + 1;
+            badge.textContent = `📍 ${currentDay}일차 진행중`;
+            badge.className = "bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold animate-pulse";
+            if(heroText) heroText.innerHTML = `현재 <strong>행운회</strong>의 <strong>${currentDay}일차</strong> 여정이 활기차게 진행되고 있습니다.`;
+        } else {
+            badge.textContent = "🏁 여정 종료";
+            badge.className = "bg-slate-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold";
+            if(heroText) heroText.innerHTML = "모든 여정이 종료되었습니다. 좋은 추억으로 오래 간직되길 바랍니다.";
+        }
+        badge.classList.remove('hidden');
+
+        // --- 2. 해외 위젯 (날씨, 환율, 물가 - 3대 원칙 완벽 적용) ---
+        
+        // 날씨 API 호출 및 UI 렌더링 함수
+        const fetchWeather = (lat, lon, containerId) => {
+            fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FShanghai`)
+                .then(res => res.json())
+                .then(data => {
+                    const container = document.getElementById(containerId);
+                    container.innerHTML = '';
+                    const wmoCodes = { 0:'☀️', 1:'🌤️', 2:'⛅', 3:'☁️', 45:'🌫️', 48:'🌫️', 51:'🌧️', 53:'🌧️', 55:'🌧️', 61:'🌧️', 63:'🌧️', 65:'🌧️', 80:'🌦️', 81:'🌦️', 82:'🌧️', 95:'🌩️' };
+                    
+                    data.daily.time.forEach((dateStr, idx) => {
+                        const code = data.daily.weathercode[idx];
+                        const max = Math.round(data.daily.temperature_2m_max[idx]);
+                        const min = Math.round(data.daily.temperature_2m_min[idx]);
+                        const emoji = wmoCodes[code] || '☁️';
+                        const d = new Date(dateStr);
+                        const dayName = ['일','월','화','수','목','금','토'][d.getDay()];
+                        
+                        container.innerHTML += `
+                            <div class="weather-item bg-slate-50 p-2 rounded-xl border border-slate-200 text-center shadow-sm min-w-[65px] lg:min-w-0">
+                                <div class="text-[10px] text-slate-500 font-bold mb-1">${d.getMonth()+1}/${d.getDate()}(${dayName})</div>
+                                <div class="text-2xl mb-1">${emoji}</div>
+                                <div class="text-xs font-bold text-slate-700">${max}° <span class="text-slate-400 font-normal">${min}°</span></div>
+                            </div>
+                        `;
+                    });
+                }).catch(() => { 
+                    document.getElementById(containerId).innerHTML = '<div class="text-xs text-slate-400 p-2">날씨 정보를 불러올 수 없습니다.</div>'; 
+                });
+        };
+
+        // 이도백하(백두산)와 연길 날씨 각각 호출
+        fetchWeather(42.42, 128.12, 'weather-mt'); // 이도백하(백두산 초입)
+        fetchWeather(42.90, 129.50, 'weather-yanji');  // 연길 시내
+        
+        // 2-2. 체감환율 및 물가 5종 (중국 위안 CNY 기준)
+        let krwPerCny = 190; // Fallback rate for CNY
+        fetch('https://open.er-api.com/v6/latest/KRW')
+            .then(res => res.json())
+            .then(data => {
+                krwPerCny = (1 / data.rates.CNY) * 1.015; // 송금 수수료 1.5% 반영
+                document.getElementById('exchange-rate').textContent = krwPerCny.toFixed(2) + ' 원';
+                updateCalculator();
+
+                // 현지 물가 리스트 5종 렌더링
+                const items = [
+                    { name: '시내 카페 아이스 아메리카노', cny: 30, icon: '☕' },
+                    { name: '식당 칭따오/설화 맥주 (1병)', cny: 15, icon: '🍺' },
+                    { name: '양꼬치 (10개 기준)', cny: 40, icon: '🍢' },
+                    { name: '생수 (500ml 마트/편의점)', cny: 3, icon: '💧' },
+                    { name: '연길 시내 택시 기본요금', cny: 6, icon: '🚕' }
+                ];
+                
+                const pCont = document.getElementById('price-container');
+                pCont.innerHTML = '';
+                items.forEach(item => {
+                    const krwPrice = Math.round(item.cny * krwPerCny);
+                    pCont.innerHTML += `
+                        <div class="flex items-center justify-between bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">${item.icon}</span>
+                                <span class="font-bold text-sm text-slate-700">${item.name}</span>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-black text-amber-500 text-sm">${item.cny} CNY</div>
+                                <div class="text-[10px] text-slate-400 font-medium">약 ${krwPrice.toLocaleString()}원</div>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+
+        // 실시간 환율 계산기 로직
+        function updateCalculator() {
+            const cnyVal = Number(document.getElementById('cny-input').value) || 0;
+            const krwVal = Math.round(cnyVal * krwPerCny);
+            document.getElementById('exchange-calc').textContent = krwVal.toLocaleString() + ' 원';
+        }
+
+        // --- 3. 생존 회화 (스마트가이드북 원칙: 단일 함수) ---
+        function showPhrase(emoji, kr, local, pron) {
+            document.getElementById('modal-emoji').textContent = emoji;
+            document.getElementById('modal-kr').textContent = kr;
+            document.getElementById('modal-local').textContent = local;
+            document.getElementById('modal-pron').textContent = `"${pron}"`;
+            document.getElementById('phrase-modal').style.display = 'flex';
+        }
+        function closePhrase() { document.getElementById('phrase-modal').style.display = 'none'; }
+
+        // --- 4. 탭 전환 기능 ---
+        function openTab(evt, tabId){
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active','bg-[#004098]','text-white','border-[#004098]','shadow-md');
+                btn.classList.add('bg-white','text-slate-500','border-slate-200');
+            });
+            document.getElementById(tabId)?.classList.remove('hidden');
+            if(evt) {
+                evt.currentTarget.classList.add('active','bg-[#004098]','text-white','border-[#004098]','shadow-md');
+                evt.currentTarget.classList.remove('bg-white','text-slate-500','border-slate-200');
+            }
+        }
+
+        // --- 5. 지도 기능 (스마트가이드북 지도 5원칙 엄수) ---
+        let map;
+        let layerGroup;
+        
+        // 백두산 3박 4일 투어 주요 스팟 좌표
+        const spots = {
+            ynj: { coords: [42.8828, 129.4514], name: "연길 국제공항", icon: "🛬" },
+            tumen: { coords: [42.9600, 129.8300], name: "도문 국경지대 (조중우의교)", icon: "🌉" },
+            erdao: { coords: [42.4200, 128.1200], name: "이도백하", icon: "🏨" },
+            west: { coords: [41.9800, 128.0000], name: "백두산 서파 천지", icon: "🌿" },
+            north: { coords: [42.0200, 128.0500], name: "백두산 북파 천지", icon: "⛰️" },
+            yanji: { coords: [42.8950, 129.5000], name: "연길 시내 (호텔 및 용정)", icon: "🏙️" }
+        };
+
+        const routes = {
+            all: { 
+                points: ['ynj', 'tumen', 'erdao', 'west', 'north', 'yanji'],
+                lines: [
+                    { latlngs: [spots.ynj.coords, spots.tumen.coords], color: '#ef4444' },
+                    { latlngs: [spots.tumen.coords, spots.erdao.coords], color: '#3b82f6' },
+                    { latlngs: [spots.erdao.coords, spots.west.coords], color: '#10b981' },
+                    { latlngs: [spots.erdao.coords, spots.north.coords], color: '#8b5cf6' },
+                    { latlngs: [spots.north.coords, spots.yanji.coords], color: '#f59e0b' }
+                ]
+            },
+            day1: { 
+                points: ['ynj', 'tumen', 'erdao'], 
+                lines: [
+                    { latlngs: [spots.ynj.coords, spots.tumen.coords], color: '#ef4444' },
+                    { latlngs: [spots.tumen.coords, spots.erdao.coords], color: '#3b82f6' }
+                ] 
+            },
+            day2: { 
+                points: ['erdao', 'west'], 
+                lines: [
+                    { latlngs: [spots.erdao.coords, spots.west.coords], color: '#10b981' },
+                    { latlngs: [spots.west.coords, spots.erdao.coords], color: '#10b981' }
+                ] 
+            },
+            day3: { 
+                points: ['erdao', 'north', 'yanji'], 
+                lines: [
+                    { latlngs: [spots.erdao.coords, spots.north.coords], color: '#8b5cf6' },
+                    { latlngs: [spots.north.coords, spots.yanji.coords], color: '#f59e0b' }
+                ] 
+            },
+            day4: { 
+                points: ['yanji', 'ynj'], 
+                lines: [{ latlngs: [spots.yanji.coords, spots.ynj.coords], color: '#3b82f6' }] 
+            }
+        };
+
+        function drawMap(routeKey) {
+            if (!map || !layerGroup) return;
+            // 💡 4원칙: 탭전환 시 clearLayers 선행
+            layerGroup.clearLayers();
+            const routeData = routes[routeKey];
+            
+            // 💡 3원칙: Draw Polylines with Animation (2초로 천천히 지정)
+            routeData.lines.forEach((lineDef) => {
+                const polyline = L.polyline(lineDef.latlngs, { color: lineDef.color, weight: 4, opacity: 0.8 }).addTo(layerGroup);
+                setTimeout(() => {
+                    const path = polyline.getElement();
+                    if (path) {
+                        const length = path.getTotalLength();
+                        path.style.transition = 'none';
+                        path.style.strokeDasharray = length + ' ' + length;
+                        path.style.strokeDashoffset = length;
+                        path.getBoundingClientRect(); // Reflow 강제
+                        path.style.transition = 'stroke-dashoffset 2s ease-in-out';
+                        path.style.strokeDashoffset = '0';
+                    }
+                }, 50);
+            });
+
+            // 💡 1 & 5원칙: Draw Markers (JS transform 조작 금지, CSS 애니메이션 적용, bindTooltip 적용)
+            let currentBounds = L.latLngBounds();
+            routeData.points.forEach((key, index) => {
+                const spot = spots[key];
+                const icon = L.divIcon({
+                    className: '',
+                    html: `<div style="font-size:26px; animation: popIn 0.5s forwards; animation-delay: ${index * 0.5}s; transform: scale(0); opacity: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">${spot.icon}</div>`,
+                    iconSize: [30, 30], iconAnchor: [15, 15]
+                });
+                const marker = L.marker(spot.coords, {icon: icon}).addTo(layerGroup);
+                marker.bindTooltip(spot.name, {direction: 'top', offset: [0, -10]});
+                currentBounds.extend(spot.coords);
+            });
+
+            // 💡 2원칙: Fit Bounds & Stabilization (300ms 대기 후 invalidateSize)
+            if(routeData.points.length > 0) {
+                map.fitBounds(currentBounds, { padding: [70, 70], maxZoom: 10 });
+                setTimeout(() => { map.invalidateSize(); }, 300);
+            }
+        }
+
+        function changeMapRoute(dayKey) {
+            document.querySelectorAll('.map-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-slate-800', 'text-white', 'shadow-md');
+                btn.classList.add('bg-white', 'text-slate-600');
+            });
+            const clickedBtn = document.querySelector(`.map-btn[onclick="changeMapRoute('${dayKey}')"]`);
+            if(clickedBtn){
+                clickedBtn.classList.add('active', 'bg-slate-800', 'text-white', 'shadow-md');
+                clickedBtn.classList.remove('bg-white', 'text-slate-600');
+            }
+            drawMap(dayKey);
+        }
+
+        function initMap(){
+            if(window.L && !map) {
+                map = L.map('map', { scrollWheelZoom: false });
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                    attribution: '&copy; OpenStreetMap', maxZoom: 18
+                }).addTo(map);
+                layerGroup = L.layerGroup().addTo(map);
+                drawMap('all');
+            }
+        }
+
+        const mapObserver = new IntersectionObserver((entries)=>{
+            if(entries[0].isIntersecting) { initMap(); mapObserver.disconnect(); }
+        }, { threshold: 0.1 });
+        mapObserver.observe(document.getElementById('map-section'));
+
+        // --- 6. 준비물 체크리스트 & 메모장 기능 ---
+        const checkItems = [
+            '여권 (만료일 6개월 이상 필수 확인)', 
+            '중국 단체(또는 개인) 비자 원본', 
+            '중국 입국 전 온라인 전자입국 신고서 작성(캡처 필요)',
+            '항공권 E-Ticket 및 일정표', 
+            '★ 경량 패딩 / 가을용 바람막이 (천지 등정 필수)', 
+            '자외선 차단제, 선글라스, 등산용 모자', 
+            '개인 상비약 (지사제, 소화제, 멀미약 등)', 
+            '작은 우산 및 비옷 (변덕스러운 고산 기후 대비)'
+        ];
+        
+        // 체크리스트 렌더링
+        const CHECK_KEY = 'tourmaker_baekdu_checklist';
+        const savedCheck = JSON.parse(localStorage.getItem(CHECK_KEY) || '{}');
+        const cCont = document.getElementById('checklist-container');
+        
+        checkItems.forEach((item, idx) => {
+            const isChecked = savedCheck[`chk_${idx}`] ? 'checked' : '';
+            cCont.innerHTML += `
+                <label class="flex items-center gap-3 bg-white px-4 py-3 rounded-xl border border-slate-200 cursor-pointer hover:bg-blue-50 transition">
+                    <input type="checkbox" id="chk_${idx}" ${isChecked} class="w-5 h-5 text-blue-600 rounded border-slate-300 focus:ring-blue-500" onchange="saveChecklist()">
+                    <span class="text-slate-700 text-sm font-medium">${item}</span>
+                </label>
+            `;
+        });
+
+        function saveChecklist() {
+            const currentCheck = {};
+            checkItems.forEach((_, idx) => {
+                currentCheck[`chk_${idx}`] = document.getElementById(`chk_${idx}`).checked;
+            });
+            localStorage.setItem(CHECK_KEY, JSON.stringify(currentCheck));
+        }
+
+        // 여행 메모장 로직
+        const MEMO_KEY = 'tourmaker_baekdu_memo';
+        const memoEl = document.getElementById('travel-memo');
+        memoEl.value = localStorage.getItem(MEMO_KEY) || '';
+        
+        memoEl.addEventListener('input', () => {
+            localStorage.setItem(MEMO_KEY, memoEl.value);
+        });
+
+        function clearMemo() {
+            if(confirm("메모하신 내용을 모두 지우시겠습니까?")) {
+                memoEl.value = '';
+                localStorage.removeItem(MEMO_KEY);
+            }
+        }
+
+        // --- 7. 공유하기 기능 ---
+        function shareLink(){
+            if (navigator.share) {
+                navigator.share({ title: '[초대장] 백두산 3박 4일 단독투어', text: '행운회 맞춤 일정표와 정보를 확인하세요.', url: window.location.href }).catch(()=>{});
+            } else {
+                navigator.clipboard?.writeText(window.location.href).then(()=>alert('일정표 주소가 복사되었습니다.'));
+            }
+        }
+    </script>
+</body>
+</html>

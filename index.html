@@ -84,18 +84,42 @@
             .print-title-section { text-align: center; margin-bottom: 15px; }
             .print-title-section h1 { font-size: 20px; font-weight: 700; color: #0f172a; letter-spacing: -0.5px; margin:0;}
             
-            .print-overview-slim { display: flex; justify-content: space-between; background-color: #f8fafc; border: 1px solid #94a3b8; border-radius: 6px; padding: 8px 12px; margin-bottom: 15px; font-size: 12.5px; }
-            .print-overview-slim div { display: flex; gap: 8px; }
-            .print-overview-slim .label { font-weight: 700; color: #004098; }
+            .print-overview-slim {
+                display: grid;
+                grid-template-columns: 1.15fr 0.85fr;
+                gap: 6px 14px;
+                background-color: #f8fafc;
+                border: 1px solid #94a3b8;
+                border-radius: 6px;
+                padding: 8px 12px;
+                margin-bottom: 15px;
+                font-size: 12.5px;
+                word-break: keep-all;
+            }
+            .print-overview-item {
+                display: flex;
+                gap: 8px;
+                align-items: flex-start;
+                min-width: 0;
+            }
+            .print-overview-item.print-overview-wide { grid-column: 1 / -1; }
+            .print-overview-slim .label {
+                font-weight: 700;
+                color: #004098;
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+            .print-overview-slim .value { line-height: 1.45; }
+            .print-nowrap { white-space: nowrap; }
             
-            /* 테이블 열 비율 고정 (11%, 75%, 14%) 및 공백 최소화 */
+            /* 테이블 열 비율 고정 (10%, 78%, 12%) — 식사열 여유 확보 */
             .print-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 12px; table-layout: fixed; border: 2px solid #1e293b; }
             .print-table th, .print-table td { border: 1px solid #1e293b; padding: 6px 8px; vertical-align: top; page-break-inside: avoid; word-break: keep-all; }
             .print-table th { background-color: #f8fafc !important; color: #1e293b; font-weight: 700; text-align: center; font-size: 12.5px; border-bottom: 2px solid #1e293b;}
             
-            .print-col-date { width: 11%; text-align: center; font-weight: 700; vertical-align: middle; background-color: #f8fafc; }
-            .print-col-desc { width: 75%; }
-            .print-col-meal { width: 14%; text-align: center; vertical-align: middle; }
+            .print-col-date { width: 10%; text-align: center; font-weight: 700; vertical-align: middle; background-color: #f8fafc; }
+            .print-col-desc { width: 78%; }
+            .print-col-meal { width: 12%; text-align: center; vertical-align: middle; padding-left: 4px; padding-right: 4px; }
             
             .print-day-divider td { border-top: 2px solid #1e293b !important; }
             
@@ -110,10 +134,10 @@
             .print-hotel-divider { border: 0; border-top: 1px dashed #94a3b8; margin: 8px 0 6px 0; }
             .print-hotel-info { font-size: 12px; color: #0f172a; font-weight:700;}
             
-            .print-meal-wrapper { display: flex; flex-direction: column; gap: 8px; justify-content: center; height: 100%; text-align: left; padding-left: 5px; }
-            .print-meal-simple { display: flex; align-items: flex-start; line-height: 1.3; font-size: 12px;}
-            .print-meal-simple strong { color: #004098; margin-right: 4px; width: 16px; flex-shrink: 0; }
-            .print-meal-menu { display: flex; flex-direction: column; word-break: keep-all;}
+            .print-meal-wrapper { display: flex; flex-direction: column; gap: 6px; justify-content: center; height: 100%; text-align: left; padding-left: 2px; }
+            .print-meal-simple { display: flex; align-items: flex-start; line-height: 1.35; font-size: 11.5px; gap: 2px; }
+            .print-meal-simple strong { color: #004098; margin-right: 2px; width: 14px; flex-shrink: 0; white-space: nowrap; }
+            .print-meal-menu { display: block; word-break: keep-all; line-height: 1.35; }
             .print-meal-sub { font-size: 10.5px; margin-top: 2px; color: #475569; }
             
             .print-remarks { font-size: 11px; color: #475569; text-align: right; font-weight: 500; margin-bottom: 10px; }
@@ -719,12 +743,21 @@
 
             <!-- Slim Overview -->
             <div class="print-overview-slim">
-                <div><span class="label">행사기간</span> 2026. 08. 05 (수) ~ 08. 08 (토)</div>
-                <div><span class="label">행사조건</span> 행운회 8명 단독 (쇼핑 2회, 노옵션)</div>
-                <div><span class="label">이용항공</span> 티웨이항공 (TW685/TW686)</div>
+                <div class="print-overview-item">
+                    <span class="label">행사기간</span>
+                    <span class="value"><span class="print-nowrap">2026. 08. 05 (수) ~ 08. 08 (토)</span></span>
+                </div>
+                <div class="print-overview-item">
+                    <span class="label">이용항공</span>
+                    <span class="value"><span class="print-nowrap">티웨이항공 (TW685/TW686)</span></span>
+                </div>
+                <div class="print-overview-item print-overview-wide">
+                    <span class="label">행사조건</span>
+                    <span class="value"><span class="print-nowrap">행운회 8명 단독</span> <span class="print-nowrap">(쇼핑 2회, 노옵션)</span></span>
+                </div>
             </div>
 
-            <!-- Itinerary Table (11% / 75% / 14%) -->
+            <!-- Itinerary Table (10% / 78% / 12%) -->
             <table class="print-table">
                 <thead>
                     <tr>
@@ -736,7 +769,7 @@
                 <tbody>
                     <!-- Day 1 -->
                     <tr class="print-day-divider">
-                        <td class="print-col-date"><strong>1일차</strong><br>8/5 (수)</td>
+                        <td class="print-col-date"><strong class="print-nowrap">1일차</strong><br><span class="print-nowrap">8/5 (수)</span></td>
                         <td class="print-col-desc">
                             <div class="print-time-flow"><span class="print-time-tag">11:50</span> 청주 국제공항 출발 (TW685)</div>
                             <div class="print-time-flow"><span class="print-time-tag">13:25</span> 연길 국제공항 도착 및 가이드 미팅</div>
@@ -761,7 +794,7 @@
 
                     <!-- Day 2 -->
                     <tr class="print-day-divider">
-                        <td class="print-col-date"><strong>2일차</strong><br>8/6 (목)</td>
+                        <td class="print-col-date"><strong class="print-nowrap">2일차</strong><br><span class="print-nowrap">8/6 (목)</span></td>
                         <td class="print-col-desc">
                             <div class="print-time-flow"><span class="print-time-tag">오전</span> 호텔 조식 후 서파 산문으로 이동 (1.5시간)</div>
                             <ul class="print-desc-list">
@@ -777,15 +810,15 @@
                         <td class="print-col-meal">
                             <div class="print-meal-wrapper">
                                 <div class="print-meal-simple"><strong>조:</strong><div class="print-meal-menu">호텔식</div></div>
-                                <div class="print-meal-simple"><strong>중:</strong><div class="print-meal-menu">비빔밥(산내)</div></div>
-                                <div class="print-meal-simple"><strong>석:</strong><div class="print-meal-menu">삼겹살 무제한</div></div>
+                                <div class="print-meal-simple"><strong>중:</strong><div class="print-meal-menu"><span class="print-nowrap">비빔밥(산내)</span></div></div>
+                                <div class="print-meal-simple"><strong>석:</strong><div class="print-meal-menu"><span class="print-nowrap">삼겹살 무제한</span></div></div>
                             </div>
                         </td>
                     </tr>
 
                     <!-- Day 3 -->
                     <tr class="print-day-divider">
-                        <td class="print-col-date"><strong>3일차</strong><br>8/7 (금)</td>
+                        <td class="print-col-date"><strong class="print-nowrap">3일차</strong><br><span class="print-nowrap">8/7 (금)</span></td>
                         <td class="print-col-desc">
                             <div class="print-time-flow"><span class="print-time-tag">오전</span> 호텔 조식 후 북파 산문으로 이동 (30분)</div>
                             <ul class="print-desc-list">
@@ -802,14 +835,14 @@
                             <div class="print-meal-wrapper">
                                 <div class="print-meal-simple"><strong>조:</strong><div class="print-meal-menu">호텔식</div></div>
                                 <div class="print-meal-simple"><strong>중:</strong><div class="print-meal-menu">현지식</div></div>
-                                <div class="print-meal-simple"><strong>석:</strong><div class="print-meal-menu">양꼬치 무제한<span class="print-meal-sub">(+맥주2병)</span></div></div>
+                                <div class="print-meal-simple"><strong>석:</strong><div class="print-meal-menu"><span class="print-nowrap">양꼬치 무제한</span><span class="print-meal-sub print-nowrap">(+맥주2병)</span></div></div>
                             </div>
                         </td>
                     </tr>
 
                     <!-- Day 4 -->
                     <tr class="print-day-divider">
-                        <td class="print-col-date"><strong>4일차</strong><br>8/8 (토)</td>
+                        <td class="print-col-date"><strong class="print-nowrap">4일차</strong><br><span class="print-nowrap">8/8 (토)</span></td>
                         <td class="print-col-desc">
                             <div class="print-time-flow"><span class="print-time-tag">오전</span> 호텔 조식 후 민족문화 탐방 투어 진행</div>
                             <ul class="print-desc-list">
@@ -822,7 +855,7 @@
                         <td class="print-col-meal">
                             <div class="print-meal-wrapper">
                                 <div class="print-meal-simple"><strong>조:</strong><div class="print-meal-menu">호텔식</div></div>
-                                <div class="print-meal-simple"><strong>중:</strong><div class="print-meal-menu">냉면+꿔바로우</div></div>
+                                <div class="print-meal-simple"><strong>중:</strong><div class="print-meal-menu"><span class="print-nowrap">냉면+꿔바로우</span></div></div>
                                 <div class="print-meal-simple"><strong>석:</strong><div class="print-meal-menu">-</div></div>
                             </div>
                         </td>

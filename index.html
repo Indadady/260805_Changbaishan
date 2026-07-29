@@ -112,14 +112,14 @@
             .print-overview-slim .value { line-height: 1.45; }
             .print-nowrap { white-space: nowrap; }
             
-            /* 테이블 열 비율 고정 (10%, 78%, 12%) — 식사열 여유 확보 */
+            /* 테이블 열 비율 고정 (10%, 75%, 15%) — 식사열 여유 확보 */
             .print-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 12px; table-layout: fixed; border: 2px solid #1e293b; }
             .print-table th, .print-table td { border: 1px solid #1e293b; padding: 6px 8px; vertical-align: top; page-break-inside: avoid; word-break: keep-all; }
             .print-table th { background-color: #f8fafc !important; color: #1e293b; font-weight: 700; text-align: center; font-size: 12.5px; border-bottom: 2px solid #1e293b;}
             
             .print-col-date { width: 10%; text-align: center; font-weight: 700; vertical-align: middle; background-color: #f8fafc; }
-            .print-col-desc { width: 78%; }
-            .print-col-meal { width: 12%; text-align: center; vertical-align: middle; padding-left: 4px; padding-right: 4px; }
+            .print-col-desc { width: 75%; }
+            .print-col-meal { width: 15%; text-align: center; vertical-align: middle; padding-left: 4px; padding-right: 4px; }
             
             .print-day-divider td { border-top: 2px solid #1e293b !important; }
             
@@ -137,7 +137,7 @@
             .print-meal-wrapper { display: flex; flex-direction: column; gap: 6px; justify-content: center; height: 100%; text-align: left; padding-left: 2px; }
             .print-meal-simple { display: flex; align-items: flex-start; line-height: 1.35; font-size: 11.5px; gap: 2px; }
             .print-meal-simple strong { color: #004098; margin-right: 2px; width: 14px; flex-shrink: 0; white-space: nowrap; }
-            .print-meal-menu { display: block; word-break: keep-all; line-height: 1.35; }
+            .print-meal-menu { display: block; word-break: break-all; line-height: 1.4; }
             .print-meal-sub { font-size: 10.5px; margin-top: 2px; color: #475569; }
             
             .print-remarks { font-size: 11px; color: #475569; text-align: right; font-weight: 500; margin-bottom: 10px; }
@@ -895,8 +895,8 @@
                         <td class="print-col-meal">
                             <div class="print-meal-wrapper">
                                 <div class="print-meal-simple"><strong>조:</strong><div class="print-meal-menu">-</div></div>
-                                <div class="print-meal-simple"><strong>중:</strong><div class="print-meal-menu">도시락 제공</div></div>
-                                <div class="print-meal-simple"><strong>석:</strong><div class="print-meal-menu">돌솥밥+요리</div></div>
+                                <div class="print-meal-simple"><strong>중:</strong><div class="print-meal-menu">웰컴과일<br>도시락</div></div>
+                                <div class="print-meal-simple"><strong>석:</strong><div class="print-meal-menu">돌솥밥<br>+요리</div></div>
                             </div>
                         </td>
                     </tr>
@@ -919,8 +919,8 @@
                         <td class="print-col-meal">
                             <div class="print-meal-wrapper">
                                 <div class="print-meal-simple"><strong>조:</strong><div class="print-meal-menu">호텔식</div></div>
-                                <div class="print-meal-simple"><strong>중:</strong><div class="print-meal-menu"><span class="print-nowrap">비빔밥(산내)</span></div></div>
-                                <div class="print-meal-simple"><strong>석:</strong><div class="print-meal-menu"><span class="print-nowrap">삼겹살 무제한</span></div></div>
+                                <div class="print-meal-simple"><strong>중:</strong><div class="print-meal-menu">비빔밥<br>(산내)</div></div>
+                                <div class="print-meal-simple"><strong>석:</strong><div class="print-meal-menu">삼겹살<br>무제한</div></div>
                             </div>
                         </td>
                     </tr>
@@ -944,7 +944,7 @@
                             <div class="print-meal-wrapper">
                                 <div class="print-meal-simple"><strong>조:</strong><div class="print-meal-menu">호텔식</div></div>
                                 <div class="print-meal-simple"><strong>중:</strong><div class="print-meal-menu">현지식</div></div>
-                                <div class="print-meal-simple"><strong>석:</strong><div class="print-meal-menu"><span class="print-nowrap">양꼬치 무제한</span><span class="print-meal-sub print-nowrap">(+맥주2병)</span></div></div>
+                                <div class="print-meal-simple"><strong>석:</strong><div class="print-meal-menu">양꼬치 무제한<br><span class="print-meal-sub">+맥주 1인2병</span></div></div>
                             </div>
                         </td>
                     </tr>
@@ -964,7 +964,7 @@
                         <td class="print-col-meal">
                             <div class="print-meal-wrapper">
                                 <div class="print-meal-simple"><strong>조:</strong><div class="print-meal-menu">호텔식</div></div>
-                                <div class="print-meal-simple"><strong>중:</strong><div class="print-meal-menu"><span class="print-nowrap">냉면+꿔바로우</span></div></div>
+                                <div class="print-meal-simple"><strong>중:</strong><div class="print-meal-menu">연변냉면<br>+꿔바러우</div></div>
                                 <div class="print-meal-simple"><strong>석:</strong><div class="print-meal-menu">-</div></div>
                             </div>
                         </td>
